@@ -3,6 +3,7 @@ import { MINICURSO_SLIDES, ROADMAP_STAGES } from "@/data/mockData";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Loader2, Sparkles } from "lucide-react";
+import { StageExplorationFlow } from "./StageIAFLow";
 
 interface MinicursoViewProps {
   stageId: string;
@@ -74,52 +75,7 @@ export function MinicursoView({ stageId }: MinicursoViewProps) {
           transition={{ duration: 0.2 }}
           className="surface-card p-8 w-full max-w-[760px]"
         >
-          {/* Markdown Content */}
-          <div className="prose prose-sm max-w-none mb-6">
-            <p className="text-body text-foreground leading-relaxed">{slide.content}</p>
-          </div>
-
-          {/* Question Block */}
-          <div className="bg-accent rounded-lg p-4 mb-4">
-            <p className="text-sm font-semibold text-foreground mb-3">{slide.question}</p>
-            <textarea
-              value={answers[currentSlide] || ""}
-              onChange={(e) =>
-                setAnswers((prev) => ({ ...prev, [currentSlide]: e.target.value }))
-              }
-              placeholder="Type your answer..."
-              rows={5}
-              className="w-full bg-card border rounded-lg p-3 text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-y text-foreground placeholder:text-muted-foreground"
-            />
-          </div>
-
-          {/* AI Feedback Panel */}
-          {feedback[currentSlide] && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-primary/5 border border-primary/10 rounded-lg p-5 mb-4"
-            >
-              <div className="flex items-center gap-2 mb-3">
-                <Sparkles className="h-4 w-4 text-primary" />
-                <span className="text-sm font-semibold text-primary">AI Feedback</span>
-              </div>
-              <div className="space-y-3">
-                <div>
-                  <p className="text-xs font-medium text-success mb-1">Clarity</p>
-                  <p className="text-sm text-foreground">{feedback[currentSlide].clarity}</p>
-                </div>
-                <div>
-                  <p className="text-xs font-medium text-destructive mb-1">Missing Information</p>
-                  <p className="text-sm text-foreground">{feedback[currentSlide].missing}</p>
-                </div>
-                <div>
-                  <p className="text-xs font-medium text-primary mb-1">Suggestion</p>
-                  <p className="text-sm text-foreground">{feedback[currentSlide].suggestion}</p>
-                </div>
-              </div>
-            </motion.div>
-          )}
+          <StageExplorationFlow stageTitle={stage?.title || "Module"} />
 
           {/* Navigation Controls */}
           <div className="flex items-center justify-between mt-6 pt-4 border-t">

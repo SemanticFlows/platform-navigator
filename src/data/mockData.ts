@@ -1,23 +1,5 @@
-export interface Startup {
-  id: string;
-  name: string;
-  tagline: string;
-  category: string;
-  stage: string;
-  score: number;
-  tam: string;
-  sam: string;
-  som: string;
-  competitors: string[];
-  trends: string[];
-  description: string;
-  problem: string;
-  solution: string;
-  features: string[];
-  businessModel: string;
-  revenue: string;
-  teamSize: number;
-}
+import { RoadmapStage, Startup } from "@/types/startup";
+
 
 export const STARTUPS: Startup[] = [
   {
@@ -141,27 +123,6 @@ export const STARTUPS: Startup[] = [
     teamSize: 15,
   },
 ];
-
-export const CATEGORIES = ["Fintech", "CleanTech", "HealthTech", "EdTech", "Cybersecurity", "AgriTech"];
-
-export const STAGES = ["Pre-Seed", "Seed", "Series A", "Series B"];
-
-export interface RoadmapModule {
-  id: string;
-  title: string;
-  type: "lesson" | "interview" | "exercise";
-  summary?: string;
-  aiDigest?: string;
-  completed: boolean;
-}
-
-export interface RoadmapStage {
-  id: string;
-  title: string;
-  progress: number;
-  status: "completed" | "active" | "pending";
-  modules: RoadmapModule[];
-}
 
 export const ROADMAP_STAGES: RoadmapStage[] = [
   {

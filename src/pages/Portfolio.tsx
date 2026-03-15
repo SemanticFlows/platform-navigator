@@ -6,6 +6,7 @@ import { ScoreBadge } from "@/components/ScoreBadge";
 import { SectionCard } from "@/components/SectionCard";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Heart } from "lucide-react";
+import { useAIDigest } from "@/hooks/useAiDigest"
 
 const TABS = ["Overview", "Market", "Product", "Business", "Metrics", "Score"] as const;
 
@@ -35,6 +36,37 @@ const PortfolioPage = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<(typeof TABS)[number]>("Overview");
   const startup = STARTUPS.find((s) => s.id === id) || STARTUPS[0];
+
+  const aboutDigest = useAIDigest(`
+    Startup: ${startup.name}
+
+    Descrição:
+    ${startup.description}
+
+    Problema:
+    ${startup.problem}
+
+    Solução:
+    ${startup.solution}
+    `)
+
+    const marketDigest = useAIDigest(`
+    Startup: ${startup.name}
+
+    TAM ${startup.tam}
+    SAM ${startup.sam}
+    SOM ${startup.som}
+
+    Competidores:
+    ${startup.competitors.join(",")}
+    `)
+
+    const productDigest = useAIDigest(`
+    Startup: ${startup.name}
+
+    Features:
+    ${startup.features.join(",")}
+    `)
 
   return (
     <div className="max-w-[1440px] mx-auto px-10 py-8">
@@ -104,7 +136,7 @@ const PortfolioPage = () => {
           >
             {activeTab === "Overview" && (
               <>
-                <SectionCard title="About" defaultOpen aiInsight={AI_INSIGHTS.about}>
+                <SectionCard title="About" defaultOpen aiInsight={aboutDigest.digest}>
                   <p className="text-body text-foreground">{startup.description}</p>
                 </SectionCard>
                 <SectionCard title="Problem" defaultOpen>
@@ -117,7 +149,7 @@ const PortfolioPage = () => {
             )}
             {activeTab === "Market" && (
               <>
-                <SectionCard title="TAM / SAM / SOM" defaultOpen aiInsight={AI_INSIGHTS.market}>
+                <SectionCard title="TAM / SAM / SOM" defaultOpen aiInsight={marketDigest.digest}>
                   <div className="grid grid-cols-3 gap-4">
                     {[
                       { label: "TAM", value: startup.tam },
@@ -153,7 +185,7 @@ const PortfolioPage = () => {
               </>
             )}
             {activeTab === "Product" && (
-              <SectionCard title="Features" defaultOpen aiInsight={AI_INSIGHTS.product}>
+              <SectionCard title="Features" defaultOpen aiInsight={productDigest.digest}>
                 <div className="grid grid-cols-2 gap-3">
                   {startup.features.map((f) => (
                     <div key={f} className="flex items-center gap-2 p-3 bg-accent rounded-lg text-sm text-foreground">
