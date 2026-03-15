@@ -195,8 +195,8 @@ export const ROADMAP_STAGES: RoadmapStage[] = [
     progress: 30,
     status: "active",
     modules: [
-      { id: "p1", title: "MVP Definition", type: "lesson", summary: "Core features identified", aiDigest: "MVP scope is well-defined. Consider reducing feature set further.", completed: true },
-      { id: "p2", title: "User Stories Workshop", type: "exercise", summary: "12 user stories written", aiDigest: "Stories cover main flows. Missing edge cases and error states.", completed: true },
+      { id: "p1", title: "MVP Definition", type: "lesson", summary: "MVP v1 focuses on 3 core features: (1) real-time bank account sync via Plaid, (2) automated cash flow dashboard with 30/60/90-day projections, (3) smart alerts for low balance and upcoming obligations. Deliberately excluded: invoicing, tax filing, multi-currency.", aiDigest: "MVP scope is well-defined and appropriately constrained. The 3-feature focus aligns with the 'cash flow visibility' core value prop. Consider whether smart alerts alone justify a paid tier, or if you need the dashboard as the 'wow' feature for conversion. Feature exclusions are smart — resist scope creep.", completed: true },
+      { id: "p2", title: "User Stories Workshop", type: "exercise", summary: "Wrote 12 user stories across 3 personas. Key stories: 'As a solo founder, I want to see my runway in real-time so I know when to fundraise.' 'As a retail owner, I want weekly cash flow predictions so I can plan inventory purchases.'", aiDigest: "Stories cover the main happy paths well. Missing critical edge cases: what happens when bank sync fails? How does the system handle multiple currencies? Error states and recovery flows need user stories too. Recommend adding 5-8 edge case stories before development.", completed: true },
       { id: "p3", title: "Technical Architecture", type: "lesson", completed: false },
       { id: "p4", title: "Prototype Review", type: "interview", completed: false },
       { id: "p5", title: "Usability Testing", type: "exercise", completed: false },
