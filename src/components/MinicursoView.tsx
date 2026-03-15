@@ -2,7 +2,7 @@ import { useState } from "react";
 import { MINICURSO_SLIDES, ROADMAP_STAGES } from "@/data/mockData";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2, Sparkles } from "lucide-react";
 
 interface MinicursoViewProps {
   stageId: string;
@@ -12,7 +12,9 @@ export function MinicursoView({ stageId }: MinicursoViewProps) {
   const stage = ROADMAP_STAGES.find((s) => s.id === stageId);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
-  const [feedback, setFeedback] = useState<Record<number, string>>({});
+  const [feedback, setFeedback] = useState<
+    Record<number, { clarity: string; missing: string; suggestion: string }>
+  >({});
   const [loading, setLoading] = useState(false);
   const [completedSlides, setCompletedSlides] = useState<Set<number>>(new Set());
 
@@ -24,32 +26,36 @@ export function MinicursoView({ stageId }: MinicursoViewProps) {
     setTimeout(() => {
       setFeedback((prev) => ({
         ...prev,
-        [currentSlide]:
-          "Good analysis. Your response demonstrates understanding of the core concept. Consider expanding on the competitive differentiation aspect for a stronger position.",
+        [currentSlide]: {
+          clarity: "Your response is well-structured and demonstrates understanding of the core concept. The argument flows logically.",
+          missing: "Consider adding quantitative data to support your claims. Market sizing would benefit from specific sources.",
+          suggestion: "Try to include 2-3 concrete examples from your industry to strengthen your analysis further.",
+        },
       }));
       setCompletedSlides((prev) => new Set([...prev, currentSlide]));
       setLoading(false);
     }, 800);
   };
 
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index);
-  };
-
   return (
-    <div>
-      <h2 className="text-display text-foreground mb-2">{stage?.title || "Module"}</h2>
-      <p className="text-muted-foreground text-sm mb-8">Minicurso — Slide {currentSlide + 1} of {MINICURSO_SLIDES.length}</p>
+    <div className="flex flex-col items-center min-h-[calc(100vh-120px)]">
+      {/* Header */}
+      <div className="w-full mb-6">
+        <p className="text-xs uppercase tracking-widest text-primary font-mono-tabular mb-1">
+          {stage?.title || "Module"}
+        </p>
+        <h2 className="text-display text-foreground">{slide.title}</h2>
+      </div>
 
-      {/* Navigation Circles */}
-      <div className="flex items-center justify-center gap-2 mb-8">
+      {/* Slide Indicators */}
+      <div className="flex items-center gap-2 mb-8">
         {MINICURSO_SLIDES.map((_, i) => (
           <button
             key={i}
-            onClick={() => goToSlide(i)}
-            className={`w-2.5 h-2.5 rounded-full transition-colors ${
+            onClick={() => setCurrentSlide(i)}
+            className={`w-3 h-3 rounded-full transition-all ${
               i === currentSlide
-                ? "bg-primary"
+                ? "bg-primary scale-125"
                 : completedSlides.has(i)
                 ? "bg-success"
                 : "bg-border"
@@ -58,7 +64,7 @@ export function MinicursoView({ stageId }: MinicursoViewProps) {
         ))}
       </div>
 
-      {/* Slide Content */}
+      {/* Slide Card */}
       <AnimatePresence mode="wait">
         <motion.div
           key={currentSlide}
@@ -66,38 +72,57 @@ export function MinicursoView({ stageId }: MinicursoViewProps) {
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: -20, opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="surface-card p-8 max-w-3xl mx-auto"
+          className="surface-card p-8 w-full max-w-[760px]"
         >
-          <h3 className="text-section-heading text-foreground mb-4">{slide.title}</h3>
-          <p className="text-body text-foreground mb-6">{slide.content}</p>
+          {/* Markdown Content */}
+          <div className="prose prose-sm max-w-none mb-6">
+            <p className="text-body text-foreground leading-relaxed">{slide.content}</p>
+          </div>
 
-          {/* Question */}
+          {/* Question Block */}
           <div className="bg-accent rounded-lg p-4 mb-4">
-            <p className="text-sm font-medium text-foreground mb-3">{slide.question}</p>
+            <p className="text-sm font-semibold text-foreground mb-3">{slide.question}</p>
             <textarea
               value={answers[currentSlide] || ""}
               onChange={(e) =>
                 setAnswers((prev) => ({ ...prev, [currentSlide]: e.target.value }))
               }
               placeholder="Type your answer..."
-              rows={4}
+              rows={5}
               className="w-full bg-card border rounded-lg p-3 text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-y text-foreground placeholder:text-muted-foreground"
             />
           </div>
 
-          {/* Feedback */}
+          {/* AI Feedback Panel */}
           {feedback[currentSlide] && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="border-l-4 border-primary bg-primary/5 p-4 rounded-r-lg mb-4"
+              className="bg-primary/5 border border-primary/10 rounded-lg p-5 mb-4"
             >
-              <p className="text-sm text-foreground">{feedback[currentSlide]}</p>
+              <div className="flex items-center gap-2 mb-3">
+                <Sparkles className="h-4 w-4 text-primary" />
+                <span className="text-sm font-semibold text-primary">AI Feedback</span>
+              </div>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-xs font-medium text-success mb-1">Clarity</p>
+                  <p className="text-sm text-foreground">{feedback[currentSlide].clarity}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-destructive mb-1">Missing Information</p>
+                  <p className="text-sm text-foreground">{feedback[currentSlide].missing}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-primary mb-1">Suggestion</p>
+                  <p className="text-sm text-foreground">{feedback[currentSlide].suggestion}</p>
+                </div>
+              </div>
             </motion.div>
           )}
 
-          {/* Actions */}
-          <div className="flex items-center justify-between mt-6">
+          {/* Navigation Controls */}
+          <div className="flex items-center justify-between mt-6 pt-4 border-t">
             <Button
               variant="ghost"
               onClick={() => setCurrentSlide(Math.max(0, currentSlide - 1))}
@@ -113,9 +138,7 @@ export function MinicursoView({ stageId }: MinicursoViewProps) {
                   onClick={handleContinue}
                   disabled={!answers[currentSlide]?.trim() || loading}
                 >
-                  {loading ? (
-                    <Loader2 className="h-4 w-4 animate-spin mr-1" />
-                  ) : null}
+                  {loading && <Loader2 className="h-4 w-4 animate-spin mr-1" />}
                   Continue
                 </Button>
               )}
@@ -130,25 +153,10 @@ export function MinicursoView({ stageId }: MinicursoViewProps) {
         </motion.div>
       </AnimatePresence>
 
-      {/* Arrow Navigation */}
-      <div className="flex justify-center gap-4 mt-6">
-        <button
-          onClick={() => setCurrentSlide(Math.max(0, currentSlide - 1))}
-          disabled={currentSlide === 0}
-          className="w-10 h-10 rounded-full border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground disabled:opacity-30 transition-colors"
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </button>
-        <button
-          onClick={() =>
-            setCurrentSlide(Math.min(MINICURSO_SLIDES.length - 1, currentSlide + 1))
-          }
-          disabled={currentSlide === MINICURSO_SLIDES.length - 1}
-          className="w-10 h-10 rounded-full border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground disabled:opacity-30 transition-colors"
-        >
-          <ChevronRight className="h-5 w-5" />
-        </button>
-      </div>
+      {/* Slide counter */}
+      <p className="text-xs text-muted-foreground mt-6 font-mono-tabular">
+        {currentSlide + 1} / {MINICURSO_SLIDES.length}
+      </p>
     </div>
   );
 }

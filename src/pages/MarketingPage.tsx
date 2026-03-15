@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Eye, Pencil } from "lucide-react";
+import { FloatingAIChat } from "@/components/FloatingAIChat";
 
 const ANCHORS = ["Overview", "Features", "Benefits", "FAQ", "Contact"];
 
@@ -13,17 +14,15 @@ const MarketingPage = () => {
   const [mode, setMode] = useState<"preview" | "edit">("preview");
 
   return (
-    <div className="max-w-[1440px] mx-auto px-8 py-10">
-      {/* Mode toggle */}
+    <div className="max-w-[1440px] mx-auto px-10 py-8">
+      {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-section-heading text-foreground">{startup.name} — Vitrine</h1>
         <div className="flex gap-1 bg-muted p-1 rounded-lg">
           <button
             onClick={() => setMode("preview")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-              mode === "preview"
-                ? "bg-card text-foreground shadow-sm"
-                : "text-muted-foreground"
+              mode === "preview" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"
             }`}
           >
             <Eye className="h-3.5 w-3.5" />
@@ -32,9 +31,7 @@ const MarketingPage = () => {
           <button
             onClick={() => setMode("edit")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-              mode === "edit"
-                ? "bg-card text-foreground shadow-sm"
-                : "text-muted-foreground"
+              mode === "edit" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"
             }`}
           >
             <Pencil className="h-3.5 w-3.5" />
@@ -44,8 +41,8 @@ const MarketingPage = () => {
       </div>
 
       {/* Section Anchors */}
-      <div className="sticky top-0 z-40 bg-background/80 backdrop-blur-md border-b mb-8 -mx-8 px-8">
-        <div className="flex gap-6 py-3">
+      <div className="sticky top-0 z-40 bg-background/80 backdrop-blur-md border-b mb-8 -mx-10 px-10">
+        <div className="flex gap-6 py-3 justify-center">
           {ANCHORS.map((anchor) => (
             <a
               key={anchor}
@@ -60,7 +57,6 @@ const MarketingPage = () => {
 
       {mode === "preview" ? (
         <div className="space-y-16">
-          {/* Hero */}
           <section id="overview" className="text-center py-16">
             <motion.h2
               initial={{ opacity: 0, scale: 0.98 }}
@@ -74,13 +70,10 @@ const MarketingPage = () => {
             </p>
             <div className="flex gap-3 justify-center">
               <Button size="lg">Get Started</Button>
-              <Button variant="outline" size="lg">
-                Learn More
-              </Button>
+              <Button variant="outline" size="lg">Learn More</Button>
             </div>
           </section>
 
-          {/* Features */}
           <section id="features">
             <h2 className="text-section-heading text-foreground mb-6 text-center">Features</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -102,13 +95,11 @@ const MarketingPage = () => {
             </div>
           </section>
 
-          {/* Benefits */}
           <section id="benefits" className="text-center">
             <h2 className="text-section-heading text-foreground mb-4">Why {startup.name}?</h2>
             <p className="text-body text-muted-foreground mx-auto">{startup.solution}</p>
           </section>
 
-          {/* FAQ */}
           <section id="faq">
             <h2 className="text-section-heading text-foreground mb-6 text-center">FAQ</h2>
             <div className="max-w-2xl mx-auto space-y-3">
@@ -123,7 +114,6 @@ const MarketingPage = () => {
             </div>
           </section>
 
-          {/* Contact */}
           <section id="contact" className="text-center py-12">
             <h2 className="text-section-heading text-foreground mb-3">Get in Touch</h2>
             <p className="text-muted-foreground mb-6">Ready to transform your business?</p>
@@ -163,12 +153,13 @@ const MarketingPage = () => {
           </div>
           <div className="flex gap-2 pt-4">
             <Button>Save Changes</Button>
-            <Button variant="outline" onClick={() => setMode("preview")}>
-              Preview
-            </Button>
+            <Button variant="outline" onClick={() => setMode("preview")}>Preview</Button>
           </div>
         </div>
       )}
+
+      {/* Floating AI Chat */}
+      <FloatingAIChat />
     </div>
   );
 };
