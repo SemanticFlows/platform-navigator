@@ -2,9 +2,11 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send, Sparkles } from "lucide-react";
 
-const INITIAL_MESSAGES = [
+type ChatMessage = { role: "ai" | "user"; content: string };
+
+const INITIAL_MESSAGES: ChatMessage[] = [
   {
-    role: "ai" as const,
+    role: "ai",
     content: "Hi! I'm your marketing AI assistant. I can help you improve your landing page copy, suggest CTAs, or analyze your messaging. What would you like to work on?",
   },
 ];
