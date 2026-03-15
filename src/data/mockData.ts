@@ -146,12 +146,86 @@ export const CATEGORIES = ["Fintech", "CleanTech", "HealthTech", "EdTech", "Cybe
 
 export const STAGES = ["Pre-Seed", "Seed", "Series A", "Series B"];
 
-export const ROADMAP_STAGES = [
-  { id: "vision", title: "Vision", progress: 85, status: "completed" as const, modules: 4 },
-  { id: "market", title: "Market", progress: 60, status: "active" as const, modules: 5 },
-  { id: "product", title: "Product", progress: 30, status: "active" as const, modules: 6 },
-  { id: "business", title: "Business", progress: 0, status: "pending" as const, modules: 4 },
-  { id: "marketing", title: "Marketing", progress: 0, status: "pending" as const, modules: 3 },
+export interface RoadmapModule {
+  id: string;
+  title: string;
+  type: "lesson" | "interview" | "exercise";
+  summary?: string;
+  aiDigest?: string;
+  completed: boolean;
+}
+
+export interface RoadmapStage {
+  id: string;
+  title: string;
+  progress: number;
+  status: "completed" | "active" | "pending";
+  modules: RoadmapModule[];
+}
+
+export const ROADMAP_STAGES: RoadmapStage[] = [
+  {
+    id: "vision",
+    title: "Vision",
+    progress: 85,
+    status: "completed",
+    modules: [
+      { id: "v1", title: "Defining Your Mission", type: "lesson", summary: "Clear mission statement drafted", aiDigest: "Strong alignment between mission and market need. Consider sharpening the unique angle.", completed: true },
+      { id: "v2", title: "Vision Interview", type: "interview", summary: "Articulated 5-year vision", aiDigest: "Vision is ambitious but achievable. Revenue projections need more detail.", completed: true },
+      { id: "v3", title: "Value Proposition Canvas", type: "exercise", summary: "Canvas completed with 4 segments", aiDigest: "Good customer fit analysis. Competitor differentiation could be stronger.", completed: true },
+      { id: "v4", title: "Founder Story", type: "lesson", summary: "Personal narrative connected to problem", aiDigest: "Compelling founder-market fit. Story resonates with target audience.", completed: false },
+    ],
+  },
+  {
+    id: "market",
+    title: "Market",
+    progress: 60,
+    status: "active",
+    modules: [
+      { id: "m1", title: "Understanding Your Market", type: "lesson", summary: "TAM/SAM/SOM estimated", aiDigest: "Market sizing is realistic. SAM could be further segmented.", completed: true },
+      { id: "m2", title: "Customer Discovery", type: "interview", summary: "10 interviews conducted", aiDigest: "Good qualitative data. Need more quantitative validation.", completed: true },
+      { id: "m3", title: "Competitive Landscape", type: "exercise", summary: "3 competitors mapped", aiDigest: "Solid competitive analysis. Missing indirect competitors.", completed: true },
+      { id: "m4", title: "Market Trends", type: "lesson", completed: false },
+      { id: "m5", title: "Go-to-Market Strategy", type: "exercise", completed: false },
+    ],
+  },
+  {
+    id: "product",
+    title: "Product",
+    progress: 30,
+    status: "active",
+    modules: [
+      { id: "p1", title: "MVP Definition", type: "lesson", summary: "Core features identified", aiDigest: "MVP scope is well-defined. Consider reducing feature set further.", completed: true },
+      { id: "p2", title: "User Stories Workshop", type: "exercise", summary: "12 user stories written", aiDigest: "Stories cover main flows. Missing edge cases and error states.", completed: true },
+      { id: "p3", title: "Technical Architecture", type: "lesson", completed: false },
+      { id: "p4", title: "Prototype Review", type: "interview", completed: false },
+      { id: "p5", title: "Usability Testing", type: "exercise", completed: false },
+      { id: "p6", title: "Product Roadmap", type: "lesson", completed: false },
+    ],
+  },
+  {
+    id: "business",
+    title: "Business",
+    progress: 0,
+    status: "pending",
+    modules: [
+      { id: "b1", title: "Business Model Canvas", type: "exercise", completed: false },
+      { id: "b2", title: "Pricing Strategy", type: "lesson", completed: false },
+      { id: "b3", title: "Revenue Projections", type: "exercise", completed: false },
+      { id: "b4", title: "Investor Readiness", type: "interview", completed: false },
+    ],
+  },
+  {
+    id: "marketing",
+    title: "Marketing",
+    progress: 0,
+    status: "pending",
+    modules: [
+      { id: "mk1", title: "Brand Positioning", type: "lesson", completed: false },
+      { id: "mk2", title: "Content Strategy", type: "exercise", completed: false },
+      { id: "mk3", title: "Launch Plan", type: "lesson", completed: false },
+    ],
+  },
 ];
 
 export const MINICURSO_SLIDES = [

@@ -20,32 +20,35 @@ export function StartupCard({ startup }: StartupCardProps) {
       whileHover={{ y: -4 }}
       className="surface-card-hover flex flex-col p-6 cursor-default"
     >
+      {/* Top: Name + Score Badge */}
       <div className="flex justify-between items-start mb-3">
-        <div className="flex-1 min-w-0">
-          <button
-            onClick={() => navigate(`/portfolio/${startup.id}`)}
-            className="text-left"
-          >
-            <h3 className="font-semibold text-lg tracking-tight text-foreground hover:text-primary transition-colors">
-              {startup.name}
-            </h3>
-          </button>
-          <p className="text-sm text-muted-foreground mt-0.5 line-clamp-1">
-            {startup.tagline}
-          </p>
-        </div>
-        <ScoreBadge score={startup.score} size="sm" />
+        <button
+          onClick={() => navigate(`/portfolio/${startup.id}`)}
+          className="text-left flex-1 min-w-0"
+        >
+          <h3 className="font-semibold text-lg tracking-tight text-foreground hover:text-primary transition-colors">
+            {startup.name}
+          </h3>
+        </button>
+        <ScoreBadge score={startup.score} size="md" />
       </div>
 
+      {/* Description */}
+      <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
+        {startup.tagline}
+      </p>
+
+      {/* Tags */}
       <div className="flex gap-2 mb-4">
-        <span className="text-xs font-medium bg-accent px-2 py-0.5 rounded-md text-accent-foreground">
+        <span className="text-xs font-medium bg-muted px-2.5 py-1 rounded-full text-muted-foreground">
           {startup.category}
         </span>
-        <span className="text-xs font-medium bg-muted px-2 py-0.5 rounded-md text-muted-foreground">
+        <span className="text-xs font-medium bg-muted px-2.5 py-1 rounded-full text-muted-foreground">
           {startup.stage}
         </span>
       </div>
 
+      {/* Actions */}
       <div className="mt-auto flex gap-2 pt-2">
         <Button
           variant="default"
@@ -61,7 +64,7 @@ export function StartupCard({ startup }: StartupCardProps) {
           size="sm"
           onClick={() => navigate(`/marketing/${startup.id}`)}
         >
-          <ExternalLink className="h-3 w-3" />
+          <ExternalLink className="h-3 w-3 mr-1" />
           Vitrine
         </Button>
       </div>
