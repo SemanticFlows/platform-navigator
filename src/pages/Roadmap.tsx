@@ -36,27 +36,32 @@
   const { id } = useParams()
 
   const { data: startups, isLoading: startupsLoading } = useStartups()
-  const { startup: userStartup, loading: userLoading } = useCurrentStartup()
+  let { startup } = useCurrentStartup()
 
-  const startup =
-    (id && startups?.find(s => s.id === id)) ||
-    userStartup ||
-    startups?.[0]
+  console.log(startups, startup)
+
+  startup =
+    (id && startups?.find(s => s.id === id)) || startup
 
 
   const [selectedStage,setSelectedStage] =
     useState<string|null>(null)
 
-  const scrollRef = useRef<HTMLDivElement>(null)
 
   console.log("resolved startup:", startup)
+  if(startup == null) return <></>
 
-  console.log(userStartup)
+  console.log(startup)
+  return <RoadmapRendering startup={startup} selectedStage={selectedStage} setSelectedStage={setSelectedStage}/>
 
-  const startupId = startup?.id
+  };
 
+function RoadmapRendering({startup, selectedStage, setSelectedStage}){
+  
   const { data: roadmapStages, isLoading } =
-    useRoadmap(startupId)
+    useRoadmap(startup.id)
+
+  const scrollRef = useRef<HTMLDivElement>(null)
 
   console.log("roadmap:", roadmapStages)
 
@@ -87,13 +92,23 @@
             </div>
             <div className="flex items-center gap-2">
               <button
-                onClick={() => scrollBy(-1)}
+                onClick={() =>
+                scrollRef.current?.scrollBy({
+                  left: -400,
+                  behavior: "smooth"
+                })
+              }
                 className="h-9 w-9 rounded-lg border border-border bg-background hover:bg-accent flex items-center justify-center transition-colors"
               >
                 <ArrowLeft className="h-4 w-4 text-foreground" />
               </button>
               <button
-                onClick={() => scrollBy(1)}
+                onClick={() =>
+                  scrollRef.current?.scrollBy({
+                    left: 400,
+                    behavior: "smooth"
+                  })
+                }
                 className="h-9 w-9 rounded-lg border border-border bg-background hover:bg-accent flex items-center justify-center transition-colors"
               >
                 <ArrowRight className="h-4 w-4 text-foreground" />
@@ -253,6 +268,6 @@
         </div>
       </div>
     );
-  };
+}
 
   export default RoadmapPage;
