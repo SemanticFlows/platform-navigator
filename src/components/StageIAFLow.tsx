@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import { runGenAI } from "@/lib/genaiClient"
-import { STARTUPS } from "@/data/mockData"
 import { MarkdownRenderer } from "./MarkdownRenderer"
 
 type Session = {
@@ -10,9 +9,18 @@ type Session = {
   aiDigest?: string
 }
 
-export function StageExplorationFlow({ stageTitle }: { stageTitle: string }) {
-
-  const startup = STARTUPS[0]
+export function StageExplorationFlow({
+  stageTitle,
+  startup
+}:{
+  stageTitle:string
+  startup:{
+    name:string
+    category:string
+    problem:string
+    solution:string
+  }
+}){
 
   const [intro,setIntro] = useState("")
   const [sessions,setSessions] = useState<Session[]>([])
@@ -33,7 +41,7 @@ export function StageExplorationFlow({ stageTitle }: { stageTitle: string }) {
 
     setSessions([
       {
-        id: crypto.randomUUID(),
+        id:crypto.randomUUID(),
         question
       }
     ])
@@ -173,8 +181,8 @@ ${answer}
     setSessions([
       ...updated,
       {
-        id: crypto.randomUUID(),
-        question: nextQuestion
+        id:crypto.randomUUID(),
+        question:nextQuestion
       }
     ])
 
@@ -209,12 +217,16 @@ ${answer}
 
   )
 }
-
 function SessionBlock({
   session,
   onSubmit
 }:{
-  session:Session
+  session:{
+    id:string
+    question:string
+    answer?:string
+    aiDigest?:string
+  }
   onSubmit:(answer:string)=>void
 }){
 
@@ -224,39 +236,56 @@ function SessionBlock({
 
     <div className="space-y-4">
 
+      {/* Question */}
+
       <MarkdownRenderer content={session.question} />
 
+      {/* Answer input */}
+
       {!session.answer && (
+
         <>
           <textarea
-            className="w-full border rounded-lg p-4 h-32"
+            className="w-full border border-border rounded-lg p-4 h-32 bg-background text-foreground"
             value={value}
             onChange={(e)=>setValue(e.target.value)}
+            placeholder="Write your answer..."
           />
 
           <button
             onClick={()=>onSubmit(value)}
-            className="bg-primary text-primary-foreground px-4 py-2 rounded"
+            disabled={!value.trim()}
+            className="bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 disabled:opacity-50"
           >
-            Continuar
+            Continue
           </button>
         </>
+
       )}
 
+      {/* User answer */}
+
       {session.answer && (
+
         <>
-          <div className="bg-muted p-4 rounded-lg">
+          <div className="bg-muted p-4 rounded-lg text-sm">
             {session.answer}
           </div>
 
+          {/* AI analysis */}
+
           {session.aiDigest && (
-            <div className="bg-primary/5 border rounded-lg p-4 text-sm">
+
+            <div className="bg-primary/5 border border-primary/10 rounded-lg p-4 text-sm">
               <MarkdownRenderer content={session.aiDigest} />
             </div>
+
           )}
         </>
+
       )}
 
     </div>
+
   )
 }

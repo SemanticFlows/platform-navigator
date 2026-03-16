@@ -1,25 +1,25 @@
 export interface Startup {
-  id: string;
-  name: string;
-  tagline: string;
-  category: string;
-  stage: string;
-  score: number;
-  tam: string;
-  sam: string;
-  som: string;
-  competitors: string[];
-  trends: string[];
-  description: string;
-  problem: string;  // o ideal aqui é passar como id de referencia do doc relacionado no saas
-  solution: string;
-  features: string[];
-  businessModel: string;
-  revenue: string;
+  id: string
+  name: string
+  tagline: string
+  category: string
+  stage: string
+  score: number
+  tam: string
+  sam: string
+  som: string
+  competitors: string[]
+  trends: string[]
+  description: string
+  problem: string
+  solution: string
+  features: string[]
+  businessModel: string
+  revenue: string
   sector: string
   icp?: string
   marketSize?: string
-  teamSize: number;
+  teamSize: number
 }
 
 export interface RoadmapModule {

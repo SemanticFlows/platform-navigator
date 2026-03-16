@@ -40,3 +40,18 @@
 .read-the-docs {
   color: #888;
 }
+
+
+#logscreen-bg{
+  width: 200%;
+    position: absolute;
+    left: 55%;
+}
+
+#logo-logscreen{
+  
+}
+
+#logscreen-logo-wrapper{
+  max-height: 65vh;
+}

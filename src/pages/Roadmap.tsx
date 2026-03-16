@@ -1,9 +1,13 @@
-import { ROADMAP_STAGES } from "@/data/mockData";
+
+import { useRoadmap } from "@/hooks/useRoadmap"
+import { useStartups } from "@/hooks/useStartup"
 import { motion } from "framer-motion";
 import { useState, useRef } from "react";
 import { CheckCircle2, Circle, PlayCircle, ArrowRight, ArrowLeft, BookOpen, MessageCircle, PenTool, Sparkles, User, ChevronRight } from "lucide-react";
 import { MinicursoView } from "@/components/MinicursoView";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { useCurrentStartup } from "@/hooks/useCurrentStartup";
+import { useNavigate, useParams } from "react-router-dom";
 
 function StatusIcon({ status }: { status: "completed" | "active" | "pending" }) {
   if (status === "completed") return <CheckCircle2 className="h-5 w-5 text-success" />;
@@ -28,12 +32,40 @@ function StatusLabel({ status }: { status: "completed" | "active" | "pending" })
 }
 
 const RoadmapPage = () => {
-  const [selectedStage, setSelectedStage] = useState<string | null>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
 
-  const scrollBy = (dir: number) => {
-    scrollRef.current?.scrollBy({ left: dir * 480, behavior: "smooth" });
-  };
+const { id } = useParams()
+const navigate = useNavigate()
+
+const { startup: userStartup, loading: userLoading } = useCurrentStartup()
+const { data: startups, isLoading: startupsLoading } = useStartups()
+
+const startup =
+  (id && startups?.find(s => s.id === id)) ||
+  userStartup ||
+  startups?.[0]
+
+const { data: roadmapStages, isLoading } =
+  useRoadmap(startup?.id)
+
+console.log(`roadmap: ${roadmapStages}`)
+
+const [selectedStage,setSelectedStage] =
+  useState<string|null>(null)
+
+const scrollRef = useRef<HTMLDivElement>(null)
+
+console.log("resolved startup:", startup)
+
+console.log(userStartup)
+
+
+  if(isLoading){
+    return (
+      <div className="flex justify-center py-20 text-muted-foreground">
+        Loading roadmap...
+      </div>
+    )
+  }
 
   if (selectedStage) {
     return (
@@ -84,7 +116,7 @@ const RoadmapPage = () => {
           className="flex gap-8 overflow-x-auto pb-4 h-full snap-x snap-mandatory scrollbar-thin"
           style={{ scrollbarWidth: "thin" }}
         >
-          {ROADMAP_STAGES.map((stage, i) => {
+          {roadmapStages?.map((stage, i) => {
             const completedCount = stage.modules.filter((m) => m.completed).length;
             const totalCount = stage.modules.length;
 
