@@ -34,20 +34,15 @@ function StatusLabel({ status }: { status: "completed" | "active" | "pending" })
 const RoadmapPage = () => {
 
 const { id } = useParams()
-const navigate = useNavigate()
 
-const { startup: userStartup, loading: userLoading } = useCurrentStartup()
 const { data: startups, isLoading: startupsLoading } = useStartups()
+const { startup: userStartup, loading: userLoading } = useCurrentStartup()
 
 const startup =
   (id && startups?.find(s => s.id === id)) ||
   userStartup ||
   startups?.[0]
 
-const { data: roadmapStages, isLoading } =
-  useRoadmap(startup?.id)
-
-console.log(`roadmap: ${roadmapStages}`)
 
 const [selectedStage,setSelectedStage] =
   useState<string|null>(null)
@@ -58,14 +53,12 @@ console.log("resolved startup:", startup)
 
 console.log(userStartup)
 
+const startupId = startup?.id
 
-  if(isLoading){
-    return (
-      <div className="flex justify-center py-20 text-muted-foreground">
-        Loading roadmap...
-      </div>
-    )
-  }
+const { data: roadmapStages, isLoading } =
+  useRoadmap(startupId)
+
+console.log("roadmap:", roadmapStages)
 
   if (selectedStage) {
     return (
