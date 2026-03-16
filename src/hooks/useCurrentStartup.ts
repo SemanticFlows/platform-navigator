@@ -23,7 +23,7 @@ export function useCurrentStartup() {
 
       const q = query(
         collection(db,"startups"),
-        where("ownerId","==",user.uid)
+        where("id","==",user.uid)
       )
 
       const snap = await getDocs(q)
